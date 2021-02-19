@@ -1,10 +1,17 @@
 <template>
   <div class="container--small">
     <ul class="tab">
-      <li class="tab__item" :class="{'tab__item--active': tab === 1}" @click="tab = 1">Login</li>
-      <li class="tab__item" :class="{'tab__item--active': tab === 2}" @click="tab = 2">Register</li>
+      <li
+        class="tab__item"
+        :class="{'tab__item--active': tab === 1 }"
+        @click="tab = 1"
+      >Login</li>
+      <li
+        class="tab__item"
+        :class="{'tab__item--active': tab === 2 }"
+        @click="tab = 2"
+      >Register</li>
     </ul>
-    <!-- ログインフォーム -->
     <div class="panel" v-show="tab === 1">
       <form class="form" @submit.prevent="login">
         <label for="login-email">Email</label>
@@ -16,14 +23,13 @@
         </div>
       </form>
     </div>
-    <!-- 会員登録 -->
     <div class="panel" v-show="tab === 2">
       <form class="form" @submit.prevent="register">
         <label for="username">Name</label>
         <input type="text" class="form__item" id="username" v-model="registerForm.name">
-        <label for="login-email">Email</label>
-        <input type="text" class="form__item" id="login-email" v-model="registerForm.email">
-        <label for="login-password">Password</label>
+        <label for="email">Email</label>
+        <input type="text" class="form__item" id="email" v-model="registerForm.email">
+        <label for="password">Password</label>
         <input type="password" class="form__item" id="password" v-model="registerForm.password">
         <label for="password-confirmation">Password (confirm)</label>
         <input type="password" class="form__item" id="password-confirmation" v-model="registerForm.password_confirmation">
@@ -36,32 +42,37 @@
 </template>
 
 <script>
-  export default {
-    data(){
-      return{
-        tab: 1,
-        loginForm:{
-          email: '',
-          password: ''
-        },
-        registerForm:{
-          name: '',
-          email: '',
-          password: '',
-          password_confirmation: ''
-        }
-      }
-    },
-    methods: {
-      login(){
-        console.log(this.loginForm)
+export default {
+  data () {
+    return {
+      tab: 1,
+      loginForm: {
+        email: '',
+        password: ''
       },
-      async register(){
-
-        await this.$store.dispatch('auth/register', this.registerForm)
-        
-        this.$router.push('/')
+      registerForm: {
+        name: '',
+        email: '',
+        password: '',
+        password_confirmation: ''
       }
     }
+  },
+  methods: {
+    async login () {
+      // authストアのloginアクションを呼び出す
+      await this.$store.dispatch('auth/login', this.loginForm)
+
+      // トップページに移動する
+      this.$router.push('/')
+    },
+    async register () {
+      // authストアのresigterアクションを呼び出す
+      await this.$store.dispatch('auth/register', this.registerForm)
+
+      // トップページに移動する
+      this.$router.push('/')
+    }
   }
+}
 </script>
